@@ -1,6 +1,6 @@
 pipeline{
 
-    agent any{
+    agent any
 
         stages{
 
@@ -13,7 +13,7 @@ pipeline{
             stage('Running Tests'){
 
                 step{
-                   bat "docker compose -f testsuites.yaml up"
+                   bat "docker compose -f testSuites.yaml up"
                 }
             }
         }
@@ -21,8 +21,7 @@ pipeline{
         post{
             always{
                 bat "docker compose -f grid.yaml down"
-                bat "docker compose -f testsuites.yaml down"
+                bat "docker compose -f testSuites.yaml down"
             }
         }
     }
-}
