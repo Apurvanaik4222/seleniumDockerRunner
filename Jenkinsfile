@@ -1,40 +1,40 @@
-pipeline{
-
+pipeline {
     agent any
 
-    parameters{
+    stages {
+        stage('Building jars') {
+         agent{
+            docker{
+             image 'maven:3.9.3-eclipse-temurin-17-focal'
+             args '-u root -v /tmp/m2:/root/.m2'
 
-        choice choices: ['chrome','firefox'],description: 'Select Browser for test',name:'BROWSER'
-    }
-
-        stages{
-
-            stage('Starting Grid'){
-
-                steps{
-                    bat "docker compose -f grid.yaml up --scale ${params.BROWSER}=2 -d"
-                }
             }
-            stage('Running Tests'){
+         }
 
-                steps{
-                   bat "docker compose -f testsuites.yaml up"
-                    script{
-                      if(fileExist('Results/testng-failed.xml'){
-                      error('Tests Failed')
-                             }
-                           }
+            steps {
+                sh "mvn clean package -DskipTests"
+            }
+        }
+
+        stage('Creating an Image') {
+            steps {
+                script{
+                    app =docker.build('apurvanaik422/seldocker100')
                 }
 
             }
         }
 
-        post{
-            always{
-                bat "docker compose -f grid.yaml down"
-                bat "docker compose -f testsuites.yaml down"
-                archiveArtifacts artifacts: 'Results/emailable-report.html', followSymlinks: false
+        stage('Pushing Image to DockerHub') {
+            steps {
+                script{
+                    docker.withRegistry('','dockercred'){
+                        docker.push(latest)
 
+                    }
+
+                }
             }
         }
     }
+}
