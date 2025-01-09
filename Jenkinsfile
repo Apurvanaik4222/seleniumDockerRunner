@@ -22,6 +22,7 @@ pipeline{
             always{
                 bat "docker compose -f grid.yaml down"
                 bat "docker compose -f testsuites.yaml down"
+                archiveArtifacts artifacts: 'Results/emailable-report.html', followSymlinks: false
             }
         }
     }
