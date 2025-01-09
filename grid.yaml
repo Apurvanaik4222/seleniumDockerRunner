@@ -7,7 +7,7 @@ services:
     image: selenium/node-chromium:4.27
     shm_size: '2g'
     depends_on:
-    - hub
+      - hub
     env_file: .env
 
 
@@ -15,21 +15,9 @@ services:
     image: selenium/node-firefox:4.27
     shm_size: '2g'
     deploy:
-      replicas: 1
-    depends_on: 
-    - hub
+      replicas: 0
+    depends_on:
+      - hub
     env_file: .env
 
-  flightReservationPortal:
-     image: selenium/docker100
-     depends_on:
-     - chrome
-     environment:
-     - BROWSER=chrome
-     - HUB_HOST=hub
-     - THREAD_COUNT=1
-     - TEST_SUITE=FlightReservation.xml
-     - CONFIG_PATH=/home/selenium-docker/config/global.properties
-     volumes:
-     - ./Results:/home/selenium-docker/test-output
   
