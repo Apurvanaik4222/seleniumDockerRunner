@@ -31,3 +31,5 @@ pipeline {
             // Archive the test result
             archiveArtifacts artifacts: 'emailable-report.html', followSymlinks: false
 }
+    }
+}
