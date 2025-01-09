@@ -1,0 +1,60 @@
+# Compiled class files
+*.class
+
+# Log files
+*.log
+
+# Maven target directory
+target/
+
+# Package files
+*.jar
+*.war
+*.ear
+
+# IDEs and editors
+## IntelliJ IDEA
+.idea/
+*.iml
+*.ipr
+*.iws
+out/
+
+## Eclipse
+.project
+.classpath
+.settings/
+.metadata/
+
+## VS Code
+.vscode/
+
+## NetBeans
+nbproject/
+build/
+nbbuild/
+dist/
+nbdist/
+*.bak
+
+## Other IDE-specific files
+*.swp
+*.swo
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.bak
+*.pid
+*.seed
+
+# Configuration files (e.g., secrets)
+*.key
+*.pem
+*.env
+
+# Dependency directories
+lib/
