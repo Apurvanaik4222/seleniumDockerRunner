@@ -1,11 +1,8 @@
 pipeline{
 
     agent any
-    {
     parameter{
-
     choices:choice ['chrome','firefox'], description: 'Select the browser', name: 'BROWSER'
-    }
     }
 
         stages{
