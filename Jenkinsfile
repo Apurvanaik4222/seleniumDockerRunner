@@ -10,12 +10,17 @@ pipeline {
                 }
             }
             steps {
-                // Handle any path-related issues by ensuring the workspace path is compatible
                 script {
-                    // Transform workspace path to Docker-compatible format
+                    // Ensure the workspace path is Docker-compatible (escaping '@' if necessary)
                     def transformedPath = env.WORKSPACE.replace('\\', '/').replace('C:', '/c')
+                    // Try to print the transformed path to check
                     echo "Transformed Workspace Path: ${transformedPath}"
-                    // Execute Maven build
+                    
+                    // If the @ character is causing issues, escape or enclose paths in quotes
+                    def workspacePath = transformedPath.replace('@', '\\@')
+                    echo "Adjusted Path for Docker: ${workspacePath}"
+
+                    // Run Maven build
                     sh "mvn clean package -DskipTests"
                 }
             }
