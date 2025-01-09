@@ -1,7 +1,7 @@
 version: "3"
 services:
    flightReservationPortal:
-      image: selenium/docker100
+      image: apurvanaik422/seldocker100
       environment:
          - BROWSER
          - HUB_HOST=hub
