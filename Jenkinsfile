@@ -29,7 +29,7 @@ pipeline {
             bat "docker compose -f testsuites.yaml down"
 
             // Archive the test result
-            archiveArtifacts artifacts: 'emailable-report.html', followSymlinks: false
+            archiveArtifacts artifacts: 'Results/emailable-report.html', followSymlinks: false
 }
     }
 }
