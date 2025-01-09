@@ -1,40 +1,29 @@
-pipeline {
+pipeline{
+
     agent any
 
-    stages {
-        stage('Building jars') {
-         agent{
-            docker{
-             image 'maven:3.9.3-eclipse-temurin-17-focal'
-             args '-u root -v /tmp/m2:/root/.m2'
+        stages{
 
+            stage('Starting Grid'){
+
+                steps{
+                    bat "docker compose -f grid.yaml up -d"
+                }
             }
-         }
+            stage('Running Tests'){
 
-            steps {
-                sh "mvn clean package -DskipTests"
+                steps{
+                   bat "docker compose -f testsuites.yaml up"
+                }
             }
         }
 
-        stage('Creating an Image') {
-            steps {
-                script{
-                    app =docker.build('apurvanaik422/seldocker100')
-                }
+        post{
+            always{
+                bat "docker compose -f grid.yaml down"
+                bat "docker compose -f testsuites.yaml down"
+                archiveArtifacts artifacts: 'Results/emailable-report.html', followSymlinks: false
 
-            }
-        }
-
-        stage('Pushing Image to DockerHub') {
-            steps {
-                script{
-                    docker.withRegistry('','dockercred'){
-                        docker.push(latest)
-
-                    }
-
-                }
             }
         }
     }
-}
