@@ -19,7 +19,13 @@ pipeline{
 
                 steps{
                    bat "docker compose -f testsuites.yaml up"
+                    script{
+                      if(fileExist('Results/testng-failed.xml'){
+                      error('Tests Failed')
+                             }
+                           }
                 }
+
             }
         }
 
