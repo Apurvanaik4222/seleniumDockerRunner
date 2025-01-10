@@ -1,35 +1,44 @@
 pipeline {
     agent any
+
     parameters {
         choice(
             name: 'BROWSER',
             choices: ['chrome', 'firefox'],
-            description: 'Select the browser'
+            description: 'Select the browser to run tests on'
         )
     }
 
     stages {
         stage('Starting Grid') {
             steps {
-                // Use the correct params syntax for passing the BROWSER parameter
-                bat "docker compose -f grid.yaml up --scale ${params.BROWSER}=2 -d"
+                script {
+                    // Dynamically scale the grid service for the selected browser
+                    bat "docker compose -f grid.yaml up --scale ${params.BROWSER}=2 -d"
+                }
             }
         }
+
         stage('Running Tests') {
             steps {
-                bat "docker compose -f testsuites.yaml up --pull=always"
+                script {
+                    // Run test suites using Docker Compose
+                    bat "docker compose -f testsuites.yaml up --pull=always"
+                }
             }
         }
     }
 
     post {
         always {
-            // Ensure grid and tests are cleaned up after execution
-            bat "docker compose -f grid.yaml down"
-            bat "docker compose -f testsuites.yaml down"
+            script {
+                // Cleanup grid and test suite services
+                bat "docker compose -f grid.yaml down || echo 'Grid already down'"
+                bat "docker compose -f testsuites.yaml down || echo 'Test suites already down'"
 
-            // Archive the test result
-            archiveArtifacts artifacts: 'Results/emailable-report.html', followSymlinks: false
-}
+                // Archive test results
+                archiveArtifacts artifacts: 'Results/emailable-report.html', followSymlinks: false
+            }
+        }
     }
 }
