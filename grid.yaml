@@ -2,6 +2,8 @@ version: "3"
 services:
   hub:
     image: selenium/hub:4.27
+    networks:
+      - seleniumdockerrunner_default
 
   chrome:
     image: selenium/node-chromium:4.27
@@ -9,15 +11,20 @@ services:
     depends_on:
       - hub
     env_file: .env
-
+    networks:
+      - seleniumdockerrunner_default
 
   firefox:
     image: selenium/node-firefox:4.27
     shm_size: '2g'
-    deploy:
-      replicas: 0
     depends_on:
       - hub
     env_file: .env
+    networks:
+      - seleniumdockerrunner_default
 
-  
+networks:
+  seleniumdockerrunner_default:
+    external: true
+    name: seleniumdockerrunner_default
+

@@ -10,3 +10,8 @@ services:
          - CONFIG_PATH=/home/selenium-docker/config/global.properties
       volumes:
          - ./Results:/home/selenium-docker/test-output
+
+networks:
+   default:
+      external:
+         name: seleniumdockerrunner_default
